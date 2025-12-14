@@ -223,3 +223,41 @@ button.primary:active {
   border-radius: 6px;
 }
 
+.setup-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 60vh;
+  gap: 16px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.setup-screen h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.setup-screen p {
+  margin: 0;
+  color: #4b5563;
+}
+
+.setup-screen input[type="number"] {
+  width: 120px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.setup-screen button.primary {
+  width: auto;
+  min-width: 160px;
+  margin-top: 12px;
+}

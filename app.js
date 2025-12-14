@@ -1,9 +1,9 @@
 let questions = [];
 let current = 0;
 let answers = {};
-let startTime = Date.now();
-let timerInterval = null;
 let shuffledOptions = {};
+let startTime = 0;
+let timerInterval = null;
 
 function shuffleArray(arr) {
   return arr
@@ -12,23 +12,41 @@ function shuffleArray(arr) {
     .map(({ v }) => v);
 }
 
-// ---------- TIMER ----------
-const timerEl = document.getElementById("timer");
-
-timerInterval = setInterval(() => {
-  let seconds = Math.floor((Date.now() - startTime) / 1000);
-  let m = String(Math.floor(seconds / 60)).padStart(2, "0");
-  let s = String(seconds % 60).padStart(2, "0");
-  timerEl.textContent = `⏱ ${m}:${s}`;
-}, 1000);
-
 // ---------- LOAD QUESTIONS ----------
+
 fetch("questions.json")
   .then(res => res.json())
   .then(data => {
-    questions = data;
-    renderQuestion();
+    questions = shuffleArray(data); // перемешиваем
+    // оставляем тест неактивным до старта
+    document.getElementById("startQuiz").onclick = () => {
+      const n = Number(document.getElementById("numQuestions").value) || 100;
+      questions = questions.slice(0, n); // обрезаем до нужного числа
+      document.getElementById("setup").style.display = "none";
+      startQuiz();
+    };
   });
+
+function startQuiz() {
+  current = 0;
+  answers = {};
+  shuffledOptions = {};
+  startTime = Date.now();
+
+  // старт таймера
+  const timerEl = document.getElementById("timer");
+  timerInterval = setInterval(() => {
+    let seconds = Math.floor((Date.now() - startTime) / 1000);
+    let m = String(Math.floor(seconds / 60)).padStart(2, "0");
+    let s = String(seconds % 60).padStart(2, "0");
+    timerEl.textContent = `⏱ ${m}:${s}`;
+  }, 1000);
+
+  document.getElementById("quiz").style.visibility = "visible";
+  document.getElementById("next").parentElement.style.visibility = "visible";
+
+  renderQuestion();
+}
 
 // ---------- RENDER ----------
 function renderQuestion() {
@@ -72,10 +90,8 @@ function renderQuestion() {
 // ---------- SAVE + NEXT ----------
 document.getElementById("next").onclick = () => {
   let q = questions[current];
-  let selected = [...document.querySelectorAll(`input[name="q${q.id}"]:checked`)]
-    .map(i => Number(i.value));
-
-  answers[q.id] = selected;
+  answers[q.id] = [...document.querySelectorAll(`input[name="q${q.id}"]:checked`)]
+      .map(i => Number(i.value));
 
   current++;
 
@@ -138,4 +154,8 @@ function finishQuiz() {
   const summary = document.createElement("h3");
   summary.textContent = `Итого: ${correctCount} / ${questions.length}`;
   results.appendChild(summary);
+
+  if (correctCount === questions.length) {
+    document.getElementById("results_header").textContent = "Нет ошибок!"
+  }
 }

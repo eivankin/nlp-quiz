@@ -23,14 +23,22 @@
         </div>
     </header>
 
+    <div id="setup" class="setup-screen">
+        <h2>Добро пожало</h2>
+        <p>Выберите количество вопросов для теста:</p>
+        <input type="number" id="numQuestions" value="100" min="1" max="222">
+        <button id="startQuiz" class="primary">Начать тест</button>
+    </div>
+
+
     <section
             id="quiz"
             class="quiz"
             role="group"
-            aria-labelledby="question"
+            aria-labelledby="question" style="visibility: hidden"
     ></section>
 
-    <div class="actions">
+    <div class="actions" style="visibility: hidden">
         <button id="next" class="primary">
             Сохранить и дальше →
         </button>
@@ -41,7 +49,7 @@
             class="results"
             style="visibility: hidden"
     >
-        <h2>Ошибки</h2>
+        <h2 id="results_header">Ошибки</h2>
         <ol id="question_results"></ol>
     </section>
 </main>
