@@ -41,29 +41,28 @@ function renderQuestion() {
 
   let div = document.createElement("div");
   div.className = "question";
-
   div.innerHTML = `<h3>${q.question}</h3>`;
 
-    let opts = document.createElement("div");
-    opts.className = "options";
+  let opts = document.createElement("div");
+  opts.className = "options";
 
-    if (!shuffledOptions[q.id]) {
-        shuffledOptions[q.id] = shuffleArray(
-            q.options.map((text, index) => ({text, index}))
-        );
-    }
+  if (!shuffledOptions[q.id]) {
+    shuffledOptions[q.id] = shuffleArray(
+      q.options.map((text, index) => ({ text, index }))
+    );
+  }
 
-  shuffledOptions[q.id].forEach((opt, i) => {
+  shuffledOptions[q.id].forEach((opt) => {
     let type = q.type === "multiple" ? "checkbox" : "radio";
     let checked =
       answers[q.id]?.includes(opt.index) ? "checked" : "";
 
-    opts.innerHTML += `
-      <label>
-        <input type="${type}" name="q${q.id}" value="${opt.index}" ${checked}>
-        ${opt.text}
-      </label>
+    let label = document.createElement("label");
+    label.innerHTML = `
+      <input type="${type}" name="q${q.id}" value="${opt.index}" ${checked}>
+      ${opt.text}
     `;
+    opts.appendChild(label);
   });
 
   div.appendChild(opts);
@@ -91,35 +90,52 @@ document.getElementById("next").onclick = () => {
 function finishQuiz() {
   clearInterval(timerInterval);
 
-  document.getElementById("quiz").innerHTML = "";
-  document.getElementById("next").style.display = "none";
+  // Скрываем quiz-блок и кнопку
+  const quiz = document.getElementById("quiz");
+  quiz.style.display = "none";
+  const next = document.getElementById("next");
+  next.parentElement.style.display = "none";
   document.getElementById("progress").style.display = "none";
 
-
-  let results = document.getElementById("results");
+  const results = document.getElementById("results");
   results.style.visibility = "visible";
-  let question_results = document.getElementById("question_results");
+
+  const question_results = document.getElementById("question_results");
+  question_results.innerHTML = ""; // очистка
 
   let correctCount = 0;
 
-  questions.forEach(q => {
+  questions.forEach((q, index) => {
     let user = answers[q.id] || [];
     let ok =
       user.length === q.correct.length &&
       user.every(v => q.correct.includes(v));
 
-    if (ok) correctCount++;
+    if (ok) {
+      correctCount++;
+    } else {
+      let li = document.createElement("li");
+      li.className = "wrong-card";
 
-    if (!ok) {
-        question_results.innerHTML += `
-      <li value="${q.id}" class="${ok ? "correct" : "wrong"}">
-        ${q.question}<br>
-        Ваш ответ: ${user.map(i => q.options[i]).join(", ") || "—"}<br>
-        Правильный: ${q.correct.map(i => q.options[i]).join(", ")}
-      </li>
-    `;
+      li.innerHTML = `
+        <div class="card-header">Вопрос ${index + 1}</div>
+        <p>${q.question}</p>
+        <div class="answer-block user-answer">
+          <span>Ваш ответ:</span>
+          <span>${user.map(i => q.options[i]).join(", ") || "—"}</span>
+        </div>
+        <div class="answer-block correct-answer">
+          <span>Правильный:</span>
+          <span>${q.correct.map(i => q.options[i]).join(", ")}</span>
+        </div>
+      `;
+
+      question_results.appendChild(li);
     }
   });
 
-  results.innerHTML += `<h3>Итого: ${correctCount} / ${questions.length}</h3>`;
+  // Итог отдельно
+  const summary = document.createElement("h3");
+  summary.textContent = `Итого: ${correctCount} / ${questions.length}`;
+  results.appendChild(summary);
 }

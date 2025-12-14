@@ -1,25 +1,51 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>NLP Final Test</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2020%2015'%3E%3Ctext%20x='0'%20y='14'%3E🥴%3C/text%3E%3C/svg%3E" type="image/svg+xml" />
+    <meta charset="UTF-8"/>
+    <title>NLP Final Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+
+    <link rel="stylesheet" href="style.css"/>
+    <link
+            rel="icon"
+            href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2020%2015'%3E%3Ctext%20x='0'%20y='14'%3E🥴%3C/text%3E%3C/svg%3E"
+            type="image/svg+xml"
+    />
 </head>
 <body>
-  <div class="container">
-    <h1>Final Test</h1>
+<main class="container">
+    <header class="header">
+        <h1>Final Test</h1>
 
-    <div id="timer">⏱ 00:00</div>
-    <div id="progress"></div>
+        <div class="meta">
+            <div id="timer" aria-live="polite">⏱ 00:00</div>
+            <div id="progress"></div>
+        </div>
+    </header>
 
-    <div id="quiz"></div>
+    <section
+            id="quiz"
+            class="quiz"
+            role="group"
+            aria-labelledby="question"
+    ></section>
 
-    <button id="next">Сохранить и дальше →</button>
+    <div class="actions">
+        <button id="next" class="primary">
+            Сохранить и дальше →
+        </button>
+    </div>
 
-    <div id="results" style="visibility: hidden"><h2>Ошибки</h2><ol id="question_results"></ol></div>
-  </div>
+    <section
+            id="results"
+            class="results"
+            style="visibility: hidden"
+    >
+        <h2>Ошибки</h2>
+        <ol id="question_results"></ol>
+    </section>
+</main>
 
-  <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
