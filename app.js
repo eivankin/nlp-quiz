@@ -17,7 +17,7 @@ function shuffleArray(arr) {
 fetch("questions.json")
   .then(res => res.json())
   .then(data => {
-    questions = shuffleArray(data); // перемешиваем
+    questions = shuffleArray(data.reverse()); // перемешиваем
     // оставляем тест неактивным до старта
     document.getElementById("startQuiz").onclick = () => {
       const n = Number(document.getElementById("numQuestions").value) || 100;
